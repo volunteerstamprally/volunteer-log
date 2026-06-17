@@ -100,7 +100,7 @@
       
       <h2 id="title">読み込み中...</h2>
 
-      <div id="stampArea"></div>
+      <!-- <div id="stampArea"></div> -->
 
       <!-- 回数スタンプカード -->
       <h3>🎖️ 参加回数スタンプ</h3>
@@ -116,7 +116,7 @@
       border-radius:12px;
       "></canvas>
 
-      <!-- <!-- ジャンルスタンプカード -->
+      <!-- ジャンルスタンプカード
       <h3 style="margin-top:40px;">
       🌈 ジャンルスタンプ
       </h3>
@@ -232,7 +232,7 @@
     let userId = "";
     let spot = "";
     let sub = "";
-    let stamps = [];
+    // let stamps = [];
     // let allGenres = [];
       
     // 画像キャッシュ
@@ -468,14 +468,14 @@
 
       console.log("② data:", data);
       
-      if(data.length === 0){
+      // if(data.length === 0){
 
-        document.getElementById("title")
-          .innerText = "活動が見つかりません";
+      //   document.getElementById("title")
+      //     .innerText = "活動が見つかりません";
 
-        return;
+      //   return;
 
-      }
+      // }
 
       if(!data || data.length === 0){
 
@@ -490,7 +490,7 @@
       document.getElementById("title").innerText =
         "📍 " + data[0].activity;
 
-      stamps = data;
+      // stamps = data;
 
       // const genreRes = await fetch(
       //   GAS_URL + "?mode=genres"
@@ -499,7 +499,7 @@
       // allGenres =
       //   await genreRes.json();
 
-      setProgress(50,"スタンプ情報取得");
+      setProgress(50,"活動情報取得");
 
       // console.log("allGenres:", allGenres);
 
@@ -507,20 +507,20 @@
       //   allGenres = [];
       // }
 
-      // 取得済み確認
-      let userData = [];
+      // // 取得済み確認
+      // let userData = [];
 
-      try {
-        // const userRes = await fetch(
-        //   GAS_URL + "?mode=user&userId=" + userId
-        // );
-        userData = await userRes.json();
+      // try {
+      //   // const userRes = await fetch(
+      //   //   GAS_URL + "?mode=user&userId=" + userId
+      //   // );
+      //   userData = await userRes.json();
 
-        setProgress(80,"ユーザー情報取得");
+      //   setProgress(80,"ユーザー情報取得");
 
-      } catch(e) {
-        console.log("ユーザー取得エラー:", e);
-      }
+      // } catch(e) {
+      //   console.log("ユーザー取得エラー:", e);
+      // }
 
       // // 表示
       // // 活動名を1回だけ表示
@@ -1030,6 +1030,9 @@
         console.error("エラー:", e);
 
         clearInterval(loadingAnim);
+
+        btn.disabled = false;
+        btn.style.opacity = "1";
             
         document.getElementById("status")
           .innerText = "エラーが発生しました";
