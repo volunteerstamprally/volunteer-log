@@ -511,9 +511,9 @@
       let userData = [];
 
       try {
-        const userRes = await fetch(
-          GAS_URL + "?mode=user&userId=" + userId
-        );
+        // const userRes = await fetch(
+        //   GAS_URL + "?mode=user&userId=" + userId
+        // );
         userData = await userRes.json();
 
         setProgress(80,"ユーザー情報取得");
@@ -863,29 +863,29 @@
         formData.append("userId", userId);
         formData.append("sub", sub);
         formData.append("spot", spot);
-        formData.append(
-          "stamps",
-          JSON.stringify(
-            stamps.map(s=>s.id)
-          )
+        // formData.append(
+        //   "stamps",
+        //   JSON.stringify(
+        //     stamps.map(s=>s.id)
+        //   )
         );
 
-        // 最新状態で台紙を再描画
-        const latestRes = await fetch(
-          GAS_URL + "?mode=user&userId=" + userId
-        );
+        // // 最新状態で台紙を再描画
+        // const latestRes = await fetch(
+        //   GAS_URL + "?mode=user&userId=" + userId
+        // );
 
-        const latestUserData =
-          await latestRes.json();
+        // const latestUserData =
+        //   await latestRes.json();
 
-        // 今回取得するスタンプを追加
-        stamps.forEach(s=>{
+        // // 今回取得するスタンプを追加
+        // stamps.forEach(s=>{
 
-          if(!latestUserData.includes(s.id)){
-            latestUserData.push(s.id);
-          }
+        //   if(!latestUserData.includes(s.id)){
+        //     latestUserData.push(s.id);
+        //   }
 
-        });
+        // });
 
         // まず保存＆LINE送信を実行
         const res = await fetch(GAS_URL,{
@@ -957,11 +957,11 @@
 
         sendData.append("spot", spot);
 
-        sendData.append(
-          "stamps",
-          JSON.stringify(
-            stamps.map(s=>s.id)
-          )
+        // sendData.append(
+        //   "stamps",
+        //   JSON.stringify(
+        //     stamps.map(s=>s.id)
+        //   )
         );
 
         // sendData.append(
