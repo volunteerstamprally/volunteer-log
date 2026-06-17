@@ -116,7 +116,7 @@
       border-radius:12px;
       "></canvas>
 
-      <!-- ジャンルスタンプカード -->
+      <!-- <!-- ジャンルスタンプカード -->
       <h3 style="margin-top:40px;">
       🌈 ジャンルスタンプ
       </h3>
@@ -130,7 +130,7 @@
       margin-top:10px;
       background:white;
       border-radius:12px;
-      "></canvas>
+      "></canvas> -->
 
       </div>
 
@@ -233,37 +233,38 @@
     let spot = "";
     let sub = "";
     let stamps = [];
-    let allGenres = [];
+    // let allGenres = [];
+      
     // 画像キャッシュ
     const cachedImages = {};
       
-    const stampPositions = {
+    // const stampPositions = {
 
-      kids:[50,260],
-      edu:[250,260],
-      welfare_dis:[450,260],
-      welfare_old:[650,260],
-      health:[845,260],
-      global:[1045,260],
-      env:[1245,260],
+    //   kids:[50,260],
+    //   edu:[250,260],
+    //   welfare_dis:[450,260],
+    //   welfare_old:[650,260],
+    //   health:[845,260],
+    //   global:[1045,260],
+    //   env:[1245,260],
 
-      animal:[50,480],
-      culture:[250,480],
-      sports:[450,480],
-      disaster:[650,480],
-      community:[845,480],
-      event:[1045,480],
-      rights:[1245,480],
+    //   animal:[50,480],
+    //   culture:[250,480],
+    //   sports:[450,480],
+    //   disaster:[650,480],
+    //   community:[845,480],
+    //   event:[1045,480],
+    //   rights:[1245,480],
 
-      studytour:[50,687],
-      online:[250,687],
-      seminar:[450,687],
-      donation:[650,687],
-      kgvnet:[845,687],
-      sdgs:[1045,687],
-      other:[1245,687]
+    //   studytour:[50,687],
+    //   online:[250,687],
+    //   seminar:[450,687],
+    //   donation:[650,687],
+    //   kgvnet:[845,687],
+    //   sdgs:[1045,687],
+    //   other:[1245,687]
 
-    };
+    // };
 
     const countPositions = {
 
@@ -491,20 +492,20 @@
 
       stamps = data;
 
-      const genreRes = await fetch(
-        GAS_URL + "?mode=genres"
-      );
+      // const genreRes = await fetch(
+      //   GAS_URL + "?mode=genres"
+      // );
 
-      allGenres =
-        await genreRes.json();
+      // allGenres =
+      //   await genreRes.json();
 
-      setProgress(50,"ボランティアジャンル情報取得");
+      setProgress(50,"スタンプ情報取得");
 
-      console.log("allGenres:", allGenres);
+      // console.log("allGenres:", allGenres);
 
-      if(!Array.isArray(allGenres)){
-        allGenres = [];
-      }
+      // if(!Array.isArray(allGenres)){
+      //   allGenres = [];
+      // }
 
       // 取得済み確認
       let userData = [];
@@ -521,55 +522,55 @@
         console.log("ユーザー取得エラー:", e);
       }
 
-      // 表示
-      // 活動名を1回だけ表示
-      const titleDiv =
-        document.createElement("div");
+      // // 表示
+      // // 活動名を1回だけ表示
+      // const titleDiv =
+      //   document.createElement("div");
 
-      titleDiv.innerHTML = `
-        <div style="
-          font-size:14px;
-          color:#666;
-          margin-bottom:10px;
-        ">
-          該当ジャンル
-        </div>
-      `;
+      // titleDiv.innerHTML = `
+      //   <div style="
+      //     font-size:14px;
+      //     color:#666;
+      //     margin-bottom:10px;
+      //   ">
+      //     該当ジャンル
+      //   </div>
+      // `;
 
-      document.getElementById("stampArea")
-        .appendChild(titleDiv);
+      // document.getElementById("stampArea")
+      //   .appendChild(titleDiv);
 
-      // ジャンル一覧
-      data.forEach(s=>{
+      // // ジャンル一覧
+      // data.forEach(s=>{
 
-        const already =
-          userData.includes(s.id);
+      //   const already =
+      //     userData.includes(s.id);
 
-        const div =
-          document.createElement("div");
+      //   const div =
+      //     document.createElement("div");
 
-        div.className = "stamp";
+      //   div.className = "stamp";
 
-        div.innerHTML = `
-          <img src="${s.image}">
+      //   div.innerHTML = `
+      //     <img src="${s.image}">
 
-          <div style="text-align:left;">
+      //     <div style="text-align:left;">
 
-            <b>${s.name}</b><br>
+      //       <b>${s.name}</b><br>
 
-            ${
-              already
-              ? "⚠️ 取得済み"
-              : "✅ 獲得できます"
-            }
+      //       ${
+      //         already
+      //         ? "⚠️ 取得済み"
+      //         : "✅ 獲得できます"
+      //       }
 
-          </div>
-        `;
+      //     </div>
+      //   `;
 
-        document.getElementById("stampArea")
-          .appendChild(div);
+      //   document.getElementById("stampArea")
+      //     .appendChild(div);
 
-      });
+      // });
 
       const todayRes = await fetch(
       GAS_URL
@@ -607,7 +608,7 @@
 
       setProgress(90,"参加回数取得");
 
-      await drawGenreBook(userData);
+      // await drawGenreBook(userData);
 
       await drawCountBook(
         visitCount
@@ -617,19 +618,19 @@
 
       status.innerText = "✅ 台紙読み込み完了";
         
-      const allAlready = stamps.every(
-        s => userData.includes(s.id)
-      );
+      // const allAlready = stamps.every(
+      //   s => userData.includes(s.id)
+      // );
 
-      let newGenre = false;
+      // let newGenre = false;
 
-      stamps.forEach(s=>{
+      // stamps.forEach(s=>{
 
-        if(!userData.includes(s.id)){
-          newGenre = true;
-        }
+      //   if(!userData.includes(s.id)){
+      //     newGenre = true;
+      //   }
 
-      });
+      // });
 
       let msg = "🎁 取得できるスタンプ\n────────\n";
 
@@ -643,22 +644,22 @@
 
       }
 
-      if(newGenre){
+      // if(newGenre){
 
-        msg += "✅ 新しいジャンルスタンプ";
+      //   msg += "✅ 新しいジャンルスタンプ";
 
-      }else{
+      // }else{
 
-        msg += "⚠️ ジャンルは取得済み";
+      //   msg += "⚠️ ジャンルは取得済み";
 
-      }
+      // }
 
       status.innerText = msg;
         
       const btn = document.getElementById("btn");
 
       if(
-        !newGenre &&
+        // !newGenre &&
         alreadyToday
       ){
         btn.style.display = "none";
@@ -683,51 +684,51 @@
 
     }
       
-    async function drawGenreBook(userData){
+    // async function drawGenreBook(userData){
 
-      const canvas =
-        document.getElementById("genreBook");;
+    //   const canvas =
+    //     document.getElementById("genreBook");;
 
-      const ctx =
-        canvas.getContext("2d");
+    //   const ctx =
+    //     canvas.getContext("2d");
 
-      ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
+    //   ctx.clearRect(
+    //     0,
+    //     0,
+    //     canvas.width,
+    //     canvas.height
+    //   );
       
-      // 台紙
-      const base = await loadImage(
-        "https://kk14universityfifth-debug.github.io/stamp-rally2/images/genrebook.png"
-      );
+    //   // 台紙
+    //   const base = await loadImage(
+    //     "https://kk14universityfifth-debug.github.io/stamp-rally2/images/genrebook.png"
+    //   );
 
-      ctx.drawImage(base,0,0);
+    //   ctx.drawImage(base,0,0);
 
-      // スタンプ
-      for(const s of allGenres){
+    //   // スタンプ
+    //   for(const s of allGenres){
 
-        if(userData.includes(s.id)){
+    //     if(userData.includes(s.id)){
 
-          const img = await loadImage(s.image);
+    //       const img = await loadImage(s.image);
 
-          const pos =
-            stampPositions[s.id];
+    //       const pos =
+    //         stampPositions[s.id];
 
-          ctx.drawImage(
-            img,
-            pos[0],
-            pos[1],
-            185,
-            205
-          );
+    //       ctx.drawImage(
+    //         img,
+    //         pos[0],
+    //         pos[1],
+    //         185,
+    //         205
+    //       );
 
-        }
+    //     }
 
-      }
+    //   }
 
-    }
+    // }
       
     async function drawCountBook(
       count,
@@ -917,8 +918,8 @@
 
         setSendProgress(50,"スタンプ取得中");
         
-        // 最新状態で再描画
-        await drawGenreBook(latestUserData);
+        // // 最新状態で再描画
+        // await drawGenreBook(latestUserData);
 
         // LINE送信用は〇枚目なし
         await drawCountBook(
@@ -928,17 +929,17 @@
 
 
         // canvas → 画像化
-        const genreCanvas =
-          document.getElementById("genreBook");
+        // const genreCanvas =
+        //   document.getElementById("genreBook");
 
         const countCanvas =
           document.getElementById("countBook");
 
-        const genreImage =
-          genreCanvas.toDataURL(
-            "image/jpeg",
-            0.7
-          );
+        // const genreImage =
+        //   genreCanvas.toDataURL(
+        //     "image/jpeg",
+        //     0.7
+        //   );
 
         const countImage =
           countCanvas.toDataURL(
@@ -963,10 +964,10 @@
           )
         );
 
-        sendData.append(
-          "genreImage",
-          genreImage
-        );
+        // sendData.append(
+        //   "genreImage",
+        //   genreImage
+        // );
 
         sendData.append(
           "countImage",
