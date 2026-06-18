@@ -90,6 +90,8 @@ fetch(`${GAS_URL}?mode=history&userId=${encodeURIComponent(userId)}`)
   .then(r => r.json())
   .then(data => {
 
+    console.log(data);
+      
     const tbody = document.querySelector("tbody");
 
     if (data.history.length === 0) {
