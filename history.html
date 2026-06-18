@@ -86,6 +86,8 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbyCYHmsD-tkFKaURRlGjLQG
 const params = new URLSearchParams(location.search);
 const userId = params.get("userId");
 
+console.log(userId);
+
 fetch(`${GAS_URL}?mode=history&userId=${encodeURIComponent(userId)}`)
   .then(r => r.json())
   .then(data => {
