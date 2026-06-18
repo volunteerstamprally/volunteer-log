@@ -2,8 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>参加履歴</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 <style>
 body{
@@ -14,17 +16,17 @@ body{
 }
 
 .card{
+    background:#fff;
+    border-radius:12px;
     max-width:500px;
     margin:auto;
-    background:white;
-    border-radius:15px;
     padding:20px;
-    box-shadow:0 2px 10px rgba(0,0,0,.1);
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
 }
 
 h2{
-    margin-top:0;
     text-align:center;
+    margin-top:0;
 }
 
 table{
@@ -35,18 +37,24 @@ table{
 th{
     text-align:left;
     border-bottom:2px solid #ddd;
-    padding:10px 5px;
+    padding:12px 5px;
 }
 
 td{
-    padding:10px 5px;
+    padding:12px 5px;
     border-bottom:1px solid #eee;
 }
 
 .total{
     margin-top:20px;
-    font-weight:bold;
     text-align:right;
+    font-weight:bold;
+}
+
+.loading{
+    text-align:center;
+    margin-top:80px;
+    font-size:20px;
 }
 
 .empty{
@@ -60,19 +68,25 @@ td{
 
 <body>
 
-<div class="card">
+<div class="loading" id="loading">
+読み込み中...
+</div>
+
+<div class="card" id="main" style="display:none;">
 
 <h2>📖 参加履歴</h2>
 
-<table id="historyTable">
+<table>
 <thead>
 <tr>
 <th>📅 取得日</th>
 <th>📍 活動名</th>
 </tr>
 </thead>
-<tbody>
+
+<tbody id="historyBody">
 </tbody>
+
 </table>
 
 <div class="total" id="total"></div>
@@ -81,52 +95,96 @@ td{
 
 <script>
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyCYHmsD-tkFKaURRlGjLQGpQ-RepnI_mRvmvPUiieIdgBaYd7WnaAMTxUqOagbDnAH/exec";
+const LIFF_ID="2010432453-r9aGOhcK";
+const GAS_URL="https://script.google.com/macros/s/AKfycbyCYHmsD-tkFKaURRlGjLQGpQ-RepnI_mRvmvPUiieIdgBaYd7WnaAMTxUqOagbDnAH/exec";
 
-const params = new URLSearchParams(location.search);
-const userId = params.get("userId");
+async function init(){
 
-console.log(userId);
+    await liff.init({
+        liffId:LIFF_ID
+    });
 
-fetch(`${GAS_URL}?mode=history&userId=${encodeURIComponent(userId)}`)
-  .then(r => r.json())
-  .then(data => {
+    if(!liff.isLoggedIn()){
+        liff.login();
+        return;
+    }
 
-    console.log(data);
-      
-    const tbody = document.querySelector("tbody");
+    const friendship=await liff.getFriendship();
 
-    if (data.history.length === 0) {
+    if(!friendship.friendFlag){
 
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="2" class="empty">
-            参加履歴はありません
-          </td>
-        </tr>
-      `;
+        document.body.innerHTML=`
+        <div style="padding:40px;text-align:center;">
+            <h2>まずは友だち追加してください</h2>
 
-    } else {
-
-      data.history.forEach(h => {
-
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-          <td>${h.date.substring(0,10)}</td>
-          <td>${h.spot}</td>
+            <a
+              href="https://lin.ee/w3gYAY3"
+              target="_blank"
+              style="
+                display:inline-block;
+                margin-top:20px;
+                padding:15px 30px;
+                background:#06C755;
+                color:white;
+                border-radius:12px;
+                text-decoration:none;
+              "
+            >
+              友だち追加する
+            </a>
+        </div>
         `;
 
-        tbody.appendChild(tr);
-
-      });
+        return;
 
     }
 
-    document.getElementById("total").textContent =
-      `🎯 合計参加回数：${data.history.length}回`;
+    const profile=await liff.getProfile();
 
-  });
+    const userId=profile.userId;
+
+    const res=await fetch(
+        `${GAS_URL}?mode=history&userId=${encodeURIComponent(userId)}`
+    );
+
+    const data=await res.json();
+
+    const tbody=document.getElementById("historyBody");
+
+    if(!data.history || data.history.length===0){
+
+        tbody.innerHTML=`
+        <tr>
+            <td colspan="2" class="empty">
+                参加履歴はありません
+            </td>
+        </tr>
+        `;
+
+    }else{
+
+        data.history.forEach(h=>{
+
+            tbody.innerHTML+=`
+            <tr>
+                <td>${h.date.substring(0,10)}</td>
+                <td>${h.spot}</td>
+            </tr>
+            `;
+
+        });
+
+    }
+
+    document.getElementById("total").innerHTML=
+        `🎯 合計参加回数：${data.history.length}回`;
+
+    document.getElementById("loading").style.display="none";
+    document.getElementById("main").style.display="block";
+
+}
+
+init();
 
 </script>
 
