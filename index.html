@@ -116,22 +116,6 @@
       border-radius:12px;
       "></canvas>
 
-      <!-- ジャンルスタンプカード
-      <h3 style="margin-top:40px;">
-      🌈 ジャンルスタンプ
-      </h3>
-
-      <canvas id="genreBook"
-      width="1492"
-      height="1054"
-      style="
-      width:100%;
-      height:auto;
-      margin-top:10px;
-      background:white;
-      border-radius:12px;
-      "></canvas> -->
-
       </div>
 
       <div id="fixedButtonArea" style="
@@ -232,47 +216,17 @@
     let userId = "";
     let spot = "";
     let sub = "";
-    // let stamps = [];
-    // let allGenres = [];
       
     // 画像キャッシュ
     const cachedImages = {};
-      
-    // const stampPositions = {
-
-    //   kids:[50,260],
-    //   edu:[250,260],
-    //   welfare_dis:[450,260],
-    //   welfare_old:[650,260],
-    //   health:[845,260],
-    //   global:[1045,260],
-    //   env:[1245,260],
-
-    //   animal:[50,480],
-    //   culture:[250,480],
-    //   sports:[450,480],
-    //   disaster:[650,480],
-    //   community:[845,480],
-    //   event:[1045,480],
-    //   rights:[1245,480],
-
-    //   studytour:[50,687],
-    //   online:[250,687],
-    //   seminar:[450,687],
-    //   donation:[650,687],
-    //   kgvnet:[845,687],
-    //   sdgs:[1045,687],
-    //   other:[1245,687]
-
-    // };
 
     const countPositions = {
 
-      1:[80,340],
-      2:[365,340],
-      3:[650,340],
-      4:[935,340],
-      5:[1220,340],
+      1:[80,335],
+      2:[365,335],
+      3:[650,335],
+      4:[935,335],
+      5:[1220,335],
 
       6:[80,595],
       7:[365,595],
@@ -468,16 +422,6 @@
 
       console.log("② data:", data);
       
-      // if(data.length === 0){
-
-      //   document.getElementById("title")
-      //     .innerText = "活動が見つかりません";
-
-      //   return;
-
-      // }
-
-      // if(!data || data.length === 0){
       if(!data){
         
         document.getElementById("title")
@@ -487,93 +431,11 @@
 
       return;
       }
-      
-      // document.getElementById("title").innerText =
-      //   "📍 " + data[0].activity;
+
       document.getElementById("title").innerText =
         "📍 " + data.name;
 
-      // stamps = data;
-
-      // const genreRes = await fetch(
-      //   GAS_URL + "?mode=genres"
-      // );
-
-      // allGenres =
-      //   await genreRes.json();
-
       setProgress(50,"活動情報取得");
-
-      // console.log("allGenres:", allGenres);
-
-      // if(!Array.isArray(allGenres)){
-      //   allGenres = [];
-      // }
-
-      // // 取得済み確認
-      // let userData = [];
-
-      // try {
-      //   // const userRes = await fetch(
-      //   //   GAS_URL + "?mode=user&userId=" + userId
-      //   // );
-      //   userData = await userRes.json();
-
-      //   setProgress(80,"ユーザー情報取得");
-
-      // } catch(e) {
-      //   console.log("ユーザー取得エラー:", e);
-      // }
-
-      // // 表示
-      // // 活動名を1回だけ表示
-      // const titleDiv =
-      //   document.createElement("div");
-
-      // titleDiv.innerHTML = `
-      //   <div style="
-      //     font-size:14px;
-      //     color:#666;
-      //     margin-bottom:10px;
-      //   ">
-      //     該当ジャンル
-      //   </div>
-      // `;
-
-      // document.getElementById("stampArea")
-      //   .appendChild(titleDiv);
-
-      // // ジャンル一覧
-      // data.forEach(s=>{
-
-      //   const already =
-      //     userData.includes(s.id);
-
-      //   const div =
-      //     document.createElement("div");
-
-      //   div.className = "stamp";
-
-      //   div.innerHTML = `
-      //     <img src="${s.image}">
-
-      //     <div style="text-align:left;">
-
-      //       <b>${s.name}</b><br>
-
-      //       ${
-      //         already
-      //         ? "⚠️ 取得済み"
-      //         : "✅ 獲得できます"
-      //       }
-
-      //     </div>
-      //   `;
-
-      //   document.getElementById("stampArea")
-      //     .appendChild(div);
-
-      // });
 
       const todayRes = await fetch(
       GAS_URL
@@ -620,20 +482,6 @@
       setProgress(95,"現在のスタンプカード取得");
 
       status.innerText = "✅ 台紙読み込み完了";
-        
-      // const allAlready = stamps.every(
-      //   s => userData.includes(s.id)
-      // );
-
-      // let newGenre = false;
-
-      // stamps.forEach(s=>{
-
-      //   if(!userData.includes(s.id)){
-      //     newGenre = true;
-      //   }
-
-      // });
 
       let msg = "🎁 取得できるスタンプ\n────────\n";
 
@@ -646,16 +494,6 @@
         msg += "⚠️ 今日の回数スタンプは取得済み\n";
 
       }
-
-      // if(newGenre){
-
-      //   msg += "✅ 新しいジャンルスタンプ";
-
-      // }else{
-
-      //   msg += "⚠️ ジャンルは取得済み";
-
-      // }
 
       status.innerText = msg;
         
@@ -686,52 +524,6 @@
         .style.display = "block";
 
     }
-      
-    // async function drawGenreBook(userData){
-
-    //   const canvas =
-    //     document.getElementById("genreBook");;
-
-    //   const ctx =
-    //     canvas.getContext("2d");
-
-    //   ctx.clearRect(
-    //     0,
-    //     0,
-    //     canvas.width,
-    //     canvas.height
-    //   );
-      
-    //   // 台紙
-    //   const base = await loadImage(
-    //     "https://kk14universityfifth-debug.github.io/stamp-rally2/images/genrebook.png"
-    //   );
-
-    //   ctx.drawImage(base,0,0);
-
-    //   // スタンプ
-    //   for(const s of allGenres){
-
-    //     if(userData.includes(s.id)){
-
-    //       const img = await loadImage(s.image);
-
-    //       const pos =
-    //         stampPositions[s.id];
-
-    //       ctx.drawImage(
-    //         img,
-    //         pos[0],
-    //         pos[1],
-    //         185,
-    //         205
-    //       );
-
-    //     }
-
-    //   }
-
-    // }
       
     async function drawCountBook(
       count,
@@ -775,31 +567,12 @@
 
       // 〇枚目表示
       if(showPage){
-
-        // ctx.font = "bold 60px sans-serif";
-
-        // ctx.fillStyle = "#333";
-
-        // ctx.textAlign = "left";
-
-        // ctx.fillText(
-        //   page + "枚目",
-        //   1250,
-        //   950
-        // );
         
         ctx.font = "bold 72px sans-serif";
         ctx.fillStyle = "#333";
         ctx.textAlign = "right";
         
         ctx.fillText(page, 1230, 950);
-        
-        // ctx.fillText(
-        //   page + "枚目",
-        //   1250,
-        //   1120
-        // );
-
       }
 
       // スタンプ描画
@@ -858,9 +631,6 @@
 
       document.getElementById("btn")
         .style.opacity = "0.5";
-      
-      // document.getElementById("status")
-      //   .innerText = "スタンプ取得中...";
 
       try{
 
@@ -873,29 +643,6 @@
         formData.append("userId", userId);
         formData.append("sub", sub);
         formData.append("spot", spot);
-        // formData.append(
-        //   "stamps",
-        //   JSON.stringify(
-        //     stamps.map(s=>s.id)
-        //   )
-        // );
-
-        // // 最新状態で台紙を再描画
-        // const latestRes = await fetch(
-        //   GAS_URL + "?mode=user&userId=" + userId
-        // );
-
-        // const latestUserData =
-        //   await latestRes.json();
-
-        // // 今回取得するスタンプを追加
-        // stamps.forEach(s=>{
-
-        //   if(!latestUserData.includes(s.id)){
-        //     latestUserData.push(s.id);
-        //   }
-
-        // });
 
         // まず保存＆LINE送信を実行
         const res = await fetch(GAS_URL,{
@@ -927,9 +674,6 @@
           latestCountData.count || 0;
 
         setSendProgress(50,"スタンプ取得中");
-        
-        // // 最新状態で再描画
-        // await drawGenreBook(latestUserData);
 
         // LINE送信用は〇枚目なし
         await drawCountBook(
@@ -938,19 +682,8 @@
           true
         );
 
-
-        // canvas → 画像化
-        // const genreCanvas =
-        //   document.getElementById("genreBook");
-
         const countCanvas =
           document.getElementById("countBook");
-
-        // const genreImage =
-        //   genreCanvas.toDataURL(
-        //     "image/jpeg",
-        //     0.7
-        //   );
 
         const countImage =
           countCanvas.toDataURL(
@@ -967,19 +700,7 @@
         sendData.append("userId", userId);
 
         sendData.append("spot", spot);
-
-        // sendData.append(
-        //   "stamps",
-        //   JSON.stringify(
-        //     stamps.map(s=>s.id)
-        //   )
-        // );
-
-        // sendData.append(
-        //   "genreImage",
-        //   genreImage
-        // );
-
+        
         sendData.append(
           "countImage",
           countImage
@@ -1001,9 +722,6 @@
           true
         );
 
-        // const text = await res.text();
-        // console.log("response:", text);
-
         clearInterval(loadingAnim);
 
         // 100%
@@ -1016,13 +734,6 @@
             
         document.getElementById("status")
            .innerText = "🎉 スタンプ獲得！";
-
-        // この瞬間にスタンプ押印
-        // await drawGenreBook(latestUserData);
-        
-        // await drawCountBook(
-        //   latestVisitCount
-        // );
 
         document.getElementById(
           "fixedButtonArea"
