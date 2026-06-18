@@ -148,7 +148,8 @@ async function init(){
     );
 
     const data=await res.json();
-
+    console.log(data);
+    
     const tbody=document.getElementById("historyBody");
 
     if(!data.history || data.history.length===0){
