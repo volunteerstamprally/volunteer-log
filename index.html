@@ -776,17 +776,24 @@
       // 〇枚目表示
       if(showPage){
 
-        ctx.font = "bold 60px sans-serif";
+        // ctx.font = "bold 60px sans-serif";
 
+        // ctx.fillStyle = "#333";
+
+        // ctx.textAlign = "left";
+
+        // ctx.fillText(
+        //   page + "枚目",
+        //   1250,
+        //   950
+        // );
+        
+        ctx.font = "bold 72px sans-serif";
         ctx.fillStyle = "#333";
-
-        ctx.textAlign = "left";
-
-        ctx.fillText(
-          page + "枚目",
-          1250,
-          950
-        );
+        ctx.textAlign = "right";
+        
+        ctx.fillText(page, 1230, 950);
+        
         // ctx.fillText(
         //   page + "枚目",
         //   1250,
@@ -927,7 +934,8 @@
         // LINE送信用は〇枚目なし
         await drawCountBook(
           latestVisitCount,
-          false
+          // false
+          true
         );
 
 
