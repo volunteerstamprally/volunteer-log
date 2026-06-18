@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>参加履歴</title>
+
+<style>
+body{
+    font-family:sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.card{
+    max-width:500px;
+    margin:auto;
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+h2{
+    margin-top:0;
+    text-align:center;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    border-bottom:2px solid #ddd;
+    padding:10px 5px;
+}
+
+td{
+    padding:10px 5px;
+    border-bottom:1px solid #eee;
+}
+
+.total{
+    margin-top:20px;
+    font-weight:bold;
+    text-align:right;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:30px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>📖 参加履歴</h2>
+
+<table id="historyTable">
+<thead>
+<tr>
+<th>📅 取得日</th>
+<th>📍 活動名</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+<div class="total" id="total"></div>
+
+</div>
+
+<script>
+
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyCYHmsD-tkFKaURRlGjLQGpQ-RepnI_mRvmvPUiieIdgBaYd7WnaAMTxUqOagbDnAH/exec";
+
+const params = new URLSearchParams(location.search);
+const userId = params.get("userId");
+
+fetch(`${GAS_URL}?mode=history&userId=${encodeURIComponent(userId)}`)
+  .then(r => r.json())
+  .then(data => {
+
+    const tbody = document.querySelector("tbody");
+
+    if (data.history.length === 0) {
+
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="2" class="empty">
+            参加履歴はありません
+          </td>
+        </tr>
+      `;
+
+    } else {
+
+      data.history.forEach(h => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td>${h.date.substring(0,10)}</td>
+          <td>${h.spot}</td>
+        `;
+
+        tbody.appendChild(tr);
+
+      });
+
+    }
+
+    document.getElementById("total").textContent =
+      `🎯 合計参加回数：${data.history.length}回`;
+
+  });
+
+</script>
+
+</body>
+</html>
