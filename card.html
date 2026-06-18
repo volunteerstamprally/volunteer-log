@@ -1,1 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+      <title>スタンプ取得
+      </title>
 
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <script src="https://static.line-scdn.net/liff/edge/2/sdk.js">
+      </script>
+
+      <style>
+        body{
+          font-family:sans-serif;
+          text-align:center;
+          padding:20px;
+          background:#f5f5f5;
+          padding-bottom:260px;
+        }
+
+        .card{
+          background:white;
+          border-radius:12px;
+          padding:20px;
+          width:92%;
+          max-width:500px;
+          margin:auto;
+          box-sizing:border-box;
+        }
+
+        .stamp{
+          display:flex;
+          align-items:center;
+          margin:10px 0;
+          padding:10px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        }
+
+        .stamp img{
+          width: 60px;
+          height:60px;
+          margin-right:10px;
+        }
+
+        button{
+          margin-top:20px;
+          padding:15px 30px;
+          border:none;
+          border-radius:10px;
+          background:#06C755;
+          color:white;
+          font-size:16px;
+        }
+      </style>
+  </head>
+
+  <body>
+
+    <div id="loading" style="
+    padding-top:120px;
+    font-size:24px;
+    font-weight:bold;
+    text-align:center;
+    ">
+
+      <div>
+        読み込み中<span id="dots">.</span>
+      </div>
+
+      <!-- バー -->
+      <div style="
+        width:300px;
+        height:20px;
+        background:#ddd;
+        border-radius:10px;
+        margin:20px auto;
+        overflow:hidden;
+      ">
+
+        <div id="progressBar" style="
+          width:0%;
+          height:100%;
+          background:#06C755;
+          transition:0.3s;
+        "></div>
+
+      </div>
+
+      <!-- % -->
+      <div id="progressText">
+        0%
+      </div>
+
+    </div>
+      
+    <!-- <div class="card"> -->
+    <div class="card" id="mainCard" style="display:none;">
+      
+      <h2 id="title">読み込み中...</h2>
+
+      <!-- <div id="stampArea"></div> -->
+
+      <!-- 回数スタンプカード -->
+      <h3>🎖️ 参加回数スタンプ</h3>
+
+      <canvas id="countBook"
+      width="1536"
+      height="1024"
+      style="
+      width:100%;
+      height:auto;
+      margin-top:10px;
+      background:white;
+      border-radius:12px;
+      "></canvas>
+
+      </div>
+
+    </div>
+
+    <script>
+    // ローディングアニメ
+    setInterval(()=>{
+
+      const dots =
+        document.getElementById("dots");
+
+      if(!dots) return;
+
+      if(dots.innerText === "."){
+        dots.innerText = "..";
+      }else if(dots.innerText === ".."){
+        dots.innerText = "...";
+      }else{
+        dots.innerText = ".";
+      }
+
+    },400);
+
+      
+    const LIFF_ID = "2010432453-r9aGOhcK";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyCYHmsD-tkFKaURRlGjLQGpQ-RepnI_mRvmvPUiieIdgBaYd7WnaAMTxUqOagbDnAH/exec";
+
+    let userId = "";
+    let spot = "";
+    let sub = "";
+      
+    // 画像キャッシュ
+    const cachedImages = {};
+
+    const countPositions = {
+
+      1:[80,325],
+      2:[365,325],
+      3:[650,325],
+      4:[935,325],
+      5:[1220,325],
+
+      6:[80,595],
+      7:[365,595],
+      8:[650,595],
+      9:[935,595],
+      10:[1220,595]
+
+    };
+
+    async function loadImage(src){
+
+      if(cachedImages[src]){
+        return cachedImages[src];
+      }
+
+      const img = new Image();
+
+      img.crossOrigin = "anonymous";
+      
+      img.src = src;
+
+      await new Promise(r=>{
+        img.onload = r;
+        img.onerror = r;
+      });
+
+      cachedImages[src] = img;
+
+      return img;
+
+    }
+
+    function setProgress(percent, text=""){
+
+      document.getElementById("progressBar")
+        .style.width = percent + "%";
+
+      document.getElementById("progressText")
+        .innerText =
+          percent + "%" +
+          (text ? " ・" + text : "");
+
+    }
+
+    function setSendProgress(percent,text){
+
+      document.getElementById("sendBar")
+        .style.width = percent + "%";
+
+      document.getElementById("sendText")
+        .innerText = percent + "%";
+
+    }
+
+    function getParam(name){
+      return new URL(location.href).searchParams.get(name);
+    }
+
+    async function init(){
+
+      await liff.init({
+        liffId: LIFF_ID
+      });
+    
+      setProgress(20,"LINEログイン");
+    
+      if(!liff.isLoggedIn()){
+        liff.login();
+        return;
+      }
+    
+      const friendship = await liff.getFriendship();
+    
+      if(!friendship.friendFlag){
+    
+        document.body.innerHTML = `
+          <div style="padding:40px;text-align:center;">
+            <h2>まずは友だち追加してください</h2>
+    
+            <a
+              href="https://lin.ee/w3gYAY3"
+              target="_blank"
+              style="
+                display:inline-block;
+                margin-top:20px;
+                padding:15px 30px;
+                background:#06C755;
+                color:white;
+                border-radius:12px;
+                text-decoration:none;
+              "
+            >
+              友だち追加する
+            </a>
+          </div>
+        `;
+    
+        return;
+      }
+    
+      const profile = await liff.getProfile();
+      userId = profile.userId;
+    
+      setProgress(40,"参加回数取得");
+    
+      const countRes = await fetch(
+        GAS_URL +
+        "?mode=count" +
+        "&userId=" + userId
+      );
+    
+      const countData = await countRes.json();
+    
+      const visitCount =
+        countData.count || 0;
+    
+      setProgress(70,"スタンプカード作成");
+    
+      document.getElementById("title").innerText =
+        "🎖️ あなたのスタンプカード";
+    
+      await drawCountBook(visitCount);
+    
+      setProgress(100,"完了");
+    
+      await new Promise(r=>setTimeout(r,500));
+    
+      document.getElementById("loading").style.display="none";
+      document.getElementById("mainCard").style.display="block";
+    
+    }
+      
+    async function drawCountBook(
+      count,
+      showPage = true
+    ){
+
+      const canvas =
+        document.getElementById("countBook");
+
+      const ctx =
+        canvas.getContext("2d");
+
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      // 何枚目か
+      let page = 1;
+
+      let stampCount = 0;
+
+      if(count > 0){
+
+        page =
+          Math.floor((count - 1) / 10) + 1;
+
+        stampCount =
+          ((count - 1) % 10) + 1;
+
+      }
+
+      // 台紙
+      const base = await loadImage(
+        "images/countbook.png"
+      );
+
+      ctx.drawImage(base,0,0);
+
+      // 〇枚目表示
+      if(showPage){
+        
+        ctx.font = "bold 72px sans-serif";
+        ctx.fillStyle = "#333";
+        ctx.textAlign = "right";
+        
+        ctx.fillText(page, 1230, 950);
+      }
+
+      // スタンプ描画
+      for(let i=1;i<=stampCount;i++){
+
+        const pos = countPositions[i];
+
+        if(!pos) continue;
+
+          const img = await loadImage(
+            "https://kk14universityfifth-debug.github.io/stamp-rally2/images/thankyou.png"
+          );
+
+          ctx.drawImage(
+            img,
+            pos[0],
+            pos[1],
+            230,
+            230
+          );
+
+      }
+
+    }
+
+    init();
+
+    </script>
+
+  </body>
+</html>
