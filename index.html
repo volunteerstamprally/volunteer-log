@@ -352,7 +352,7 @@
         liffId: LIFF_ID
       });
 
-      setProgress(10,"LINEログイン");
+      setProgress(20,"LINEログイン");
 
       if(!liff.isLoggedIn()){
         liff.login();
@@ -464,7 +464,7 @@
 
       const data = await res.json();
 
-      setProgress(25,"活動情報取得");
+      setProgress(40,"活動情報取得");
 
       console.log("② data:", data);
       
@@ -609,7 +609,7 @@
       const visitCount =
         countData.count || 0;
 
-      setProgress(90,"参加回数取得");
+      setProgress(70,"参加回数取得");
 
       // await drawGenreBook(userData);
 
