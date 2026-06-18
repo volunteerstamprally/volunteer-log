@@ -477,8 +477,9 @@
 
       // }
 
-      if(!data || data.length === 0){
-
+      // if(!data || data.length === 0){
+      if(!data){
+        
         document.getElementById("title")
           .innerText = "活動が見つかりません";
 
@@ -487,8 +488,10 @@
       return;
       }
       
+      // document.getElementById("title").innerText =
+      //   "📍 " + data[0].activity;
       document.getElementById("title").innerText =
-        "📍 " + data[0].activity;
+        "📍 " + data.name;
 
       // stamps = data;
 
